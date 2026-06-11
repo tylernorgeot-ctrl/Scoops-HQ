@@ -2,7 +2,7 @@
   "name": "Scoops HQ",
   "short_name": "Scoops HQ",
   "description": "Ice Cream Inventory & Batch Scheduler",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#FDF6EC",
   "theme_color": "#2C1A0E",
@@ -18,5 +18,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "scope": "./"
 }

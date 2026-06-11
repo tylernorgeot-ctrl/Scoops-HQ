@@ -1,5 +1,5 @@
-var CACHE = 'scoops-hq-v1';
-var FILES = ['/', '/index.html', '/manifest.json', '/icon.png'];
+var CACHE = 'scoops-hq-v2';
+var FILES = ['./', 'index.html', 'manifest.json', 'icon.png'];
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
@@ -19,14 +19,16 @@ self.addEventListener('activate', function(e) {
   self.clients.claim();
 });
 
+// Network-first: always try to get the freshest version from GitHub,
+// fall back to the cached copy when offline.
 self.addEventListener('fetch', function(e) {
   e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      return cached || fetch(e.request).then(function(response) {
-        var clone = response.clone();
-        caches.open(CACHE).then(function(cache) { cache.put(e.request, clone); });
-        return response;
-      }).catch(function() { return cached; });
+    fetch(e.request).then(function(response) {
+      var clone = response.clone();
+      caches.open(CACHE).then(function(cache) { cache.put(e.request, clone); });
+      return response;
+    }).catch(function() {
+      return caches.match(e.request);
     })
   );
 });
